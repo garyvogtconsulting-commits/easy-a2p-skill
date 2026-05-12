@@ -1,0 +1,25 @@
+{
+  "skill_name": "easy-a2p",
+  "evals": [
+    {
+      "id": 1,
+      "name": "validate-sample-with-merge-fields",
+      "prompt": "I want to make sure my A2P sample message will pass GHL Trust Center review. Here's the message: 'Hi {{contact.first_name}}, your appointment with {{location.name}} is on Thursday at {{appointment.time}}. Reply STOP to unsubscribe.' Can you check this for me?",
+      "expected_output": "Skill invokes validate.sh with the user's text mapped to Sample Message 1. Returns finding identifying the curly-brace merge fields ({{contact.first_name}}, {{location.name}}, {{appointment.time}}) as the #1 documented rejection cause. Provides a fixed version using either real example names ('Hi Sarah') or square-bracket placeholders ('Hi [Customer Name]').",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "draft-mixed-campaign-with-dba",
+      "prompt": "I'm setting up A2P 10DLC for a new client. Their legal entity is 'Acme Holdings LLC' but they go by 'Acme Salon' publicly. They send appointment reminders, account updates, and occasional promotional offers. Their website is acmesalon.com and they collect opt-ins via a form at acmesalon.com/sms. Beauty industry, expecting maybe 2,000 messages per month. Can you draft the full GHL Trust Center submission packet for me?",
+      "expected_output": "Skill invokes draft.sh with draftData including legalName 'Acme Holdings LLC', dbaName 'Acme Salon', useCase 'Low Volume Mixed' (or 'Mixed'), industry 'beauty', optInMethod 'Website Form', website 'https://acmesalon.com', optInUrl 'https://acmesalon.com/sms'. Returns full submission packet. Use Case Description has 5 sentences with the 'We are doing business as Acme Salon.' declaration as sentence 2, and transactional/promotional content in separate sentences. Sample messages and opt-in checkboxes use 'Acme Salon' (the DBA). Privacy Policy and Terms of Service section headers use 'Acme Holdings LLC DBA Acme Salon' format.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "validate-rejection-recovery",
+      "prompt": "My GHL campaign got rejected. The reviewer said 'use case mismatch — your samples don't match the declared use case'. Here's my Use Case Description: 'Sarah Mitchell uses SMS messaging to send marketing messages to opted-in customers.' And here are my two sample messages: Sample 1: 'Hi Marcus, your tour at 123 Oak St is confirmed for Saturday at 2pm. Reply STOP.' Sample 2: 'Hi Sarah, new listing alert! 456 Pine Ave just hit the market — 3BR/2BA $425K. Reply STOP.' Can you tell me what's wrong?",
+      "expected_output": "Skill invokes validate.sh with the Use Case Description, Sample Message 1, and Sample Message 2. Returns findings: (1) Use Case Description is too vague — 'send marketing messages' echoes the dropdown label, doesn't name specific content; (2) Use case mismatch — declared as Marketing-only but Sample 1 is transactional (appointment confirmation). Recommends switching to Mixed use case (since the client legitimately sends both types) and rewriting the Use Case Description in 4-sentence format with separate transactional/promotional sentences. Provides paste-ready replacement copy."
+    }
+  ]
+}
