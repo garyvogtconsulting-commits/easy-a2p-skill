@@ -74,18 +74,23 @@ confirmation — don't ask redundantly. But if they only asked you to
 
 ## Authentication
 
-The skill requires `EASY_A2P_API_KEY` to be set in the user's environment.
+The skill needs an Easy A2P API key to call the backend. Two ways to
+provide it:
+
+1. **Paste it into chat** (easiest — works for everyone). The user pastes
+   their key (`eaap_…`) and Claude exports it for the script call within
+   the same session. No terminal commands required.
+2. **Persistent env var** (recommended for repeat users). The key lives in
+   `~/.zshrc` / `~/.bashrc` so every new shell has it. Suggest this only
+   AFTER the user has confirmed it works in chat once.
+
 The user can find their API key in the Easy A2P dashboard under
-**Settings → API Access**.
+**Settings → API Access**. New accounts get 3 free credits, no card
+required (sign up at https://easya2p.app).
 
-If `EASY_A2P_API_KEY` is unset when invoking either action, tell the user
-where to get it and how to set it:
-
-```bash
-export EASY_A2P_API_KEY=eaap_your_key_here
-```
-
-For persistence, suggest adding the export to `~/.zshrc` or `~/.bashrc`.
+When the key is missing, ALWAYS offer the paste-in-chat path FIRST — it
+keeps non-technical users in the conversation. Only mention the terminal
+export as a "for next time" follow-up.
 
 ## When to invoke each action
 
@@ -121,8 +126,13 @@ see `reference/dba-handling.md` for the placement rule.
 
 When the user invokes this skill:
 
-1. **Check for `EASY_A2P_API_KEY`.** If missing, surface the auth instructions
-   above before doing anything else. Don't try to call the API without auth.
+1. **Check for `EASY_A2P_API_KEY`.** If missing, do NOT block the user
+   upfront with terminal commands. For `draft`, run the full interview
+   first — by Round 15 you'll already have all their answers, and the
+   auth fallback message at that point offers paste-in-chat as the
+   primary path. For `validate` / `fix`, briefly ask: "Paste your Easy
+   A2P API key (starts with `eaap_`) and I'll use it for this run, or
+   sign up at https://easya2p.app if you don't have one yet."
 
 2. **Identify the action.** Validate, draft, or fix? Read the user's intent
    from context. If ambiguous, ask one clarifying question. If the user
@@ -143,6 +153,14 @@ When the user invokes this skill:
    same validation, same scope-mismatch guards.
 
    **Interview rules:**
+   - **NEVER echo internal variable names back to the user.** SKILL.md uses
+     `Capture: fieldName` and similar phrasing as INSTRUCTIONS TO YOU about
+     which `draftData` field to populate — these are not for the user. Do
+     NOT write "Captured: optInMethod = 'Website Form'" or similar in the
+     chat. Just acknowledge naturally ("Got it." / "Thanks." / "Noted.")
+     and continue to the next round. Internal field names like `legalName`,
+     `optInUrl`, `hasEIN`, `bizType`, `dataSecurity`, etc. should never
+     appear in your messages to the user.
    - **One round per topic.** Use smart grouping where fields are tightly
      related (e.g., address as `street, city, state, zip` together; EIN
      status + number + age in one round when applicable). Otherwise,
@@ -272,6 +290,19 @@ When the user invokes this skill:
    > "Authorized Representative — full name and job title.
    > Example: 'Sarah Mitchell, Owner'"
 
+   **CRITICAL — split the name before passing to draft.sh.** The server
+   expects three separate fields, NOT a combined `authRepName` /
+   `authRepTitle`. Parse the user's reply into:
+   - `authRepFirstName` — first word of the name
+   - `authRepLastName` — everything after the first word (handles middle
+     names: "Gary Ross Vogt" → first="Gary", last="Ross Vogt")
+   - `authRepJobTitle` — the title portion after the comma
+
+   Example: input `"Sarah Mitchell, Owner"` →
+   `{ authRepFirstName: "Sarah", authRepLastName: "Mitchell", authRepJobTitle: "Owner" }`.
+   If you send `authRepName` / `authRepTitle` instead, the GHL Trust
+   Center fields come back blank — confirmed broken in v1.0.0 testing.
+
    **Round 7 — Use case**
    > "Which campaign use case best matches what you'll send?
    > ⭐ Low Volume Mixed (Recommended) — for businesses sending both transactional + promotional
@@ -287,11 +318,11 @@ When the user invokes this skill:
    > Security Alert"
 
    **Round 8 — Plain-English description**
-   > "Describe in plain English what your messages will say. The AI
-   > generator will plug your description into the appropriate TCR-
-   > compliant template structure for your use case — you don't need
-   > to write in any special format or worry about combining content
-   > types. Just tell us what you'll send."
+   > "What kinds of messages do you send and to who do you send them?"
+
+   That's the whole ask. Do NOT pad with explanation about templates,
+   compliance, or AI restructuring — the web app doesn't, and the user
+   doesn't need to know how the sausage is made.
 
    Do NOT show the user an example structure or coach them on
    compliance phrasing — the web app doesn't do this and the AI
@@ -428,7 +459,7 @@ When the user invokes this skill:
    confirmation, not another teaching moment.
 
    Example output (for a typical Mixed campaign with DBA, no override):
-   > "Ready to generate? Quick summary before I spend your 2 credits:
+   > "Here is a summary of your inputs. Ready to generate your Fresh Draft?
    >
    > • Brand: Acme Holdings LLC (DBA: Acme Salon)
    > • Use case: Low Volume Mixed
@@ -465,8 +496,11 @@ When the user invokes this skill:
 
    **Auth fallback message (verbatim — show this when key is missing):**
 
-   > "All your wizard answers are captured and ready to fire. To
-   > actually generate your packet, you need an Easy A2P API key.
+   > "All your answers are captured and ready to go. I just need an
+   > Easy A2P API key to make the call.
+   >
+   > **If you already have a key:** paste it here in the chat (it starts
+   > with `eaap_`) and I'll use it for this run.
    >
    > **If you don't have an account yet:**
    > 1. Visit https://easya2p.app and click **Sign Up**.
@@ -474,35 +508,30 @@ When the user invokes this skill:
    >    — enough for one Draft Fresh Copy (2 credits) plus one Validate
    >    Existing Copy (1 credit).
    > 3. Verify your email if prompted.
+   > 4. Open your Easy A2P dashboard, go to **Settings → API Access**,
+   >    click **Generate API Key**, and copy the key. It starts with
+   >    `eaap_` and is shown only once — if you lose it, regenerate.
+   > 5. Paste the key here in the chat.
    >
-   > **Once you're signed in:**
-   > 4. Open your Easy A2P dashboard.
-   > 5. Go to **Settings → API Access**.
-   > 6. Click **Generate API Key**. The key starts with `eaap_` followed
-   >    by 64 hex characters.
-   > 7. **Copy it immediately** — for security, the key is only shown
-   >    once. If you lose it, you can regenerate (which auto-revokes the
-   >    old key).
-   >
-   > **To make the key available to me:**
-   > Open a terminal and run (replace the placeholder with your real key):
-   >
-   > ```bash
-   > echo 'export EASY_A2P_API_KEY=eaap_your_actual_key_here' >> ~/.zshrc && source ~/.zshrc
-   > ```
-   >
-   > That stores the key in your shell config so it's available in every
-   > terminal you open from now on. Verify with:
+   > Once I have your key, I'll re-run the draft with the inputs you
+   > already provided — no need to repeat the interview."
+
+   **When the user pastes the key:** export it for the script call in this
+   session (`export EASY_A2P_API_KEY=eaap_…`), then immediately call
+   `scripts/draft.sh`. Do NOT wait, do NOT ask another confirmation —
+   the user already confirmed at Round 15.
+
+   **After a successful run, offer the persistence path as a follow-up:**
+   > "If you want me to remember this key for future sessions, run this
+   > in your terminal once:
    >
    > ```bash
-   > echo "Length: $(echo -n \"$EASY_A2P_API_KEY\" | wc -c) chars"
+   > echo 'export EASY_A2P_API_KEY=eaap_your_key_here' >> ~/.zshrc && source ~/.zshrc
    > ```
    >
-   > You should see `Length: 69 chars`.
-   >
-   > **When you're done:** reply 'key set' or 'try again' here and I'll
-   > re-run `scripts/draft.sh` with the inputs you already provided —
-   > you don't have to walk through the interview again."
+   > That way you won't have to paste it again."
+
+   This is optional — never block the flow on it.
 
    ---
 
