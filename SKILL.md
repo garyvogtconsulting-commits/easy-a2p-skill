@@ -84,8 +84,8 @@ provide it:
    `~/.zshrc` / `~/.bashrc` so every new shell has it. Suggest this only
    AFTER the user has confirmed it works in chat once.
 
-The user can find their API key in the Easy A2P dashboard under
-**Settings → API Access**. New accounts get 3 free credits, no card
+The user can find their API key in Easy A2P by clicking their name in
+the top right → **API Access**. New accounts get 3 free credits, no card
 required (sign up at https://easya2p.app).
 
 When the key is missing, ALWAYS offer the paste-in-chat path FIRST — it
@@ -508,9 +508,10 @@ When the user invokes this skill:
    >    — enough for one Draft Fresh Copy (2 credits) plus one Validate
    >    Existing Copy (1 credit).
    > 3. Verify your email if prompted.
-   > 4. Open your Easy A2P dashboard, go to **Settings → API Access**,
-   >    click **Generate API Key**, and copy the key. It starts with
-   >    `eaap_` and is shown only once — if you lose it, regenerate.
+   > 4. Open Easy A2P again, click your name in the top right →
+   >    **API Access**, click **Generate API Key**, and copy the key.
+   >    It starts with `eaap_` and is shown only once — if you lose it,
+   >    regenerate.
    > 5. Paste the key here in the chat.
    >
    > Once I have your key, I'll re-run the draft with the inputs you
