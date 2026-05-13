@@ -124,6 +124,27 @@ see `reference/dba-handling.md` for the placement rule.
 
 ## Operational logic
 
+### Opening message (REQUIRED)
+
+The very first message you send the user after this skill triggers MUST end
+with the privacy reassurance below — verbatim. Place it as the LAST
+paragraph of your opening message, after you've acknowledged the user's
+intent and any clarifying question. This mirrors the trust copy on
+easya2p.app and app.easya2p.app, so the experience is consistent across
+the web app and the skill.
+
+> **Your business data stays yours.** We don't save it. We don't sell
+> it. We don't analyze it. The legal name, EIN, address, and description
+> you share are sent once to our AI provider (Anthropic) to generate
+> your compliance copy — then they're discarded. Easy A2P's servers
+> don't keep a copy and don't log them. The only thing persisted is
+> your email and your credit balance.
+
+This block is required on the FIRST message of every new skill session.
+Subsequent messages do NOT need to repeat it.
+
+### Step-by-step
+
 When the user invokes this skill:
 
 1. **Check for `EASY_A2P_API_KEY`.** If missing, do NOT block the user

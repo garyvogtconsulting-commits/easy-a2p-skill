@@ -5,6 +5,17 @@ All notable changes to the easy-a2p skill are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.0.3] — 2026-05-13
+
+### Added
+- **Privacy reassurance in the skill's opening message.** Every new
+  skill session now ends its first reply with a "Your business data
+  stays yours" paragraph that mirrors the trust copy on easya2p.app
+  and app.easya2p.app. Tells users their legal name, EIN, address,
+  and description are sent once to Anthropic to generate copy and
+  then discarded — never stored or logged on Easy A2P's servers.
+  Consistent trust signal across web app, marketing site, and skill.
+
 ## [1.0.2] — 2026-05-12
 
 ### Fixed
