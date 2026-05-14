@@ -5,6 +5,29 @@ All notable changes to the easy-a2p skill are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.0.4] — 2026-05-14
+
+### Changed
+- **All three scripts (`validate.sh`, `draft.sh`, `fix.sh`) now surface
+  the `X-Credits-Remaining` HTTP response header to the user.** When
+  Easy A2P's backend reports a remaining credit balance (which it does
+  for normal customers via the response header, not the JSON body),
+  the scripts now print `[easy-a2p] Credits remaining: N` to **stderr**.
+  The body still goes to stdout unchanged, so existing JSON parsers
+  keep working — the credit info is purely additive and visible to
+  users without polluting structured output.
+- **Scripts now correctly propagate HTTP status as exit code.** Previously
+  they relied on `--fail-with-body` which masked the underlying HTTP
+  code. Now they capture the code via `-w` and exit `22` (curl's
+  HTTP-error code) when the response is `>= 400`. Body is still
+  emitted on error so callers can inspect the error JSON.
+
+### Notes for users
+- Admin accounts and unlimited (`plan_max`) plans don't have a finite
+  credit balance, so they won't see the credits-remaining message.
+  This is expected — the message only appears when there's a real
+  balance to report.
+
 ## [1.0.3] — 2026-05-13
 
 ### Added
