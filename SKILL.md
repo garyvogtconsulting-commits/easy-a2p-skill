@@ -764,6 +764,13 @@ When the user invokes this skill:
    Details — Messaging Use Case", "Legal Documents") to mirror the
    Trust Center wizard's flow.
 
+   **Never show the user a numeric score.** The API response includes a
+   `score` field — it is internal only. Do NOT display it, quote it, or
+   describe the result as a number or percentage. Present the plain-English
+   `verdict` (e.g. "DO NOT SUBMIT") and the per-section pass/warn/fail
+   status instead — those are the meaningful signals. This applies to
+   every action (`review`, `fix`, `draft`).
+
 7. **Be proactive about DBA handling.** If the user mentions a DBA different
    from their legal entity, confirm both names before drafting or fixing.
    The skill follows GHL's "We are doing business as [DBA Name]"

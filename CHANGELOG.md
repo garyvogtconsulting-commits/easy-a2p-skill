@@ -23,6 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   users from spending 3 credits on a fix without first seeing — for 1
   credit — exactly what fails, and it gives the fix the Review's findings
   to work from.
+- **The skill never shows a numeric score.** The API response carries an
+  internal `score` field; the skill now treats it as internal only and
+  never displays it. Results are presented with the plain-English
+  `verdict` and per-section pass/warn/fail status instead.
 
 ## [1.0.5] — 2026-05-19
 
