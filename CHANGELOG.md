@@ -5,6 +5,29 @@ All notable changes to the easy-a2p skill are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.0.6] — 2026-05-19
+
+### Changed
+- **"Validate" is now "Review" everywhere user-facing.** The skill's
+  first action — grading existing GHL Trust Center copy — is now called
+  "Review existing copy" instead of "Validate existing copy", matching
+  the web app's "Review Existing Copy" wording. All user-facing language
+  in `SKILL.md` and `README.md` updated. (The internal script
+  `validate.sh` and the `/api/validate` endpoint keep their names — they
+  are implementation detail the user never sees.)
+- **`fix` is now gated behind a Review.** The skill no longer offers or
+  runs the 3-credit `fix` until the user has run a 1-credit Review in the
+  same session, and it no longer presents a "Review or Fix?" choice up
+  front. Even when a user opens with "fix this copy", the skill runs the
+  Review first, presents the findings, then offers the fix. This stops
+  users from spending 3 credits on a fix without first seeing — for 1
+  credit — exactly what fails, and it gives the fix the Review's findings
+  to work from.
+- **The skill never shows a numeric score.** The API response carries an
+  internal `score` field; the skill now treats it as internal only and
+  never displays it. Results are presented with the plain-English
+  `verdict` and per-section pass/warn/fail status instead.
+
 ## [1.0.5] — 2026-05-19
 
 ### Added

@@ -2,7 +2,7 @@
 
 The official Claude Code skill for **A2P 10DLC compliance in GoHighLevel**.
 
-Validates GHL Trust Center submission copy against The Campaign Registry's
+Reviews GHL Trust Center submission copy against The Campaign Registry's
 documented rejection causes, and drafts compliant submission packets from
 intake fields. Wraps the [Easy A2P](https://easya2p.app) compliance engine.
 
@@ -10,7 +10,7 @@ intake fields. Wraps the [Easy A2P](https://easya2p.app) compliance engine.
 
 Three actions:
 
-- **Validate existing copy** (1 credit) — Paste any of the 9 GHL Trust
+- **Review existing copy** (1 credit) — Paste any of the 9 GHL Trust
   Center sections (Brand Registration, Sample Messages, Opt-In Checkboxes,
   Privacy Policy, Terms of Service, etc.) and get back structured findings:
   status, specific rule that fired, why it matters. Findings only — not
@@ -44,7 +44,7 @@ git clone https://github.com/garyvogtconsulting-commits/skill-easy-a2p.git easy-
 
 The skill is now available in Claude Code. Trigger it by mentioning
 GoHighLevel A2P 10DLC, TCR rejection, Trust Center, or asking Claude to
-validate or draft SMS submission copy.
+review or draft SMS submission copy.
 
 ## Authentication
 
