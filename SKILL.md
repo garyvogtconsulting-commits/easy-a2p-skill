@@ -703,11 +703,42 @@ When the user invokes this skill:
    3-credit ask" section above) unless the user already explicitly asked
    to fix/rewrite/correct. Collect: (a) the current section copy that
    needs correction, (b) optional `rejectionContext` if there's a TCR
-   rejection email or reviewer note. Call `scripts/fix.sh` with a body
-   shaped `{"sections": {...}, "rejectionContext": "..."}`. The response
+   rejection email or reviewer note.
+
+   **Use-case checkpoint — REQUIRED before calling `fix.sh`.** When the
+   user supplies only a few sections, the corrector cannot see the
+   campaign's use case or opt-in method — and rather than leave the copy
+   vague (which fails review) it will GUESS them: silently rewriting a
+   vague Campaign Description as "Low Volume Mixed", or assuming a
+   "Website Form" opt-in. Use case is a **permanent** campaign attribute,
+   and a wrong use case is itself a TCR rejection cause — a bad guess
+   misregisters the campaign. So before calling `fix.sh`, check whether
+   the sections the user gave you already establish BOTH:
+   - the **campaign use case** (Appointment Reminders / Customer Care,
+     Account Notifications, Marketing Offers & Promotions, Low Volume
+     Mixed, 2FA, Delivery Notification, etc.), and
+   - the **opt-in method** (GHL Chat Widget, Website Form, QR Code,
+     Paper Form, Kiosk, Facebook Lead Form, Verbal).
+
+   If a complete Campaign Description (or Opt-In Flow Description) is
+   among the submitted sections and makes both clear, proceed. If either
+   is missing or ambiguous, **ask the user — just those one or two
+   questions.** This is NOT the 15-round draft interview; it is the
+   minimum context the fix needs to produce copy that fits the user's
+   real campaign instead of a guessed one. Then pass the confirmed
+   answers to `fix.sh` inside the `rejectionContext` string, clearly
+   labelled — e.g.: `"Confirmed use case: Low Volume Mixed. Confirmed
+   opt-in method: Website Form. Rejection reasons: <validate findings>"`.
+
+   Call `scripts/fix.sh` with a body shaped
+   `{"sections": {...}, "rejectionContext": "..."}`. The response
    contains `corrected` (paste-ready text per section), `changes` (what
    was wrong, what was fixed), and `verification` (PASS confirmation per
    section). Present `corrected` text inside code blocks for clean copy.
+   **If any `changes` entry flags an assumed use case or opt-in method
+   ("USE CASE ASSUMED — NOT IN SUBMISSION"), surface it to the user
+   prominently** — never let them paste copy built on a guessed use case
+   into the GHL Trust Center.
 
 6. **Format results clearly.** The API returns structured JSON. Present
    findings to the user in plain English: section name, status, the specific

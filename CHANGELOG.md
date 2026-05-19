@@ -5,6 +5,28 @@ All notable changes to the easy-a2p skill are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.0.5] — 2026-05-19
+
+### Added
+- **Use-case checkpoint before `fix`.** When a user asks the skill to
+  fix only a few sections, the corrector can't see the campaign's use
+  case or opt-in method and would silently guess them — rewriting a
+  vague Campaign Description as "Low Volume Mixed" or assuming a
+  "Website Form" opt-in. Use case is a permanent campaign attribute, so
+  a wrong guess misregisters the campaign. The skill now checks whether
+  the submitted sections establish the use case and opt-in method; if
+  not, it asks the user those one or two questions (not the full
+  15-round draft interview) and passes the confirmed answers to
+  `fix.sh` via `rejectionContext`. If the backend still has to assume a
+  use case, it flags it ("USE CASE ASSUMED — NOT IN SUBMISSION") and the
+  skill surfaces that to the user before they submit.
+
+### Notes for users
+- This pairs with a backend change: a free-text `rejectionContext` is
+  now read by the fix endpoint (previously only the web app's
+  structured rejection object was). Confirmed use-case / opt-in details
+  passed in `rejectionContext` are treated as authoritative.
+
 ## [1.0.4] — 2026-05-14
 
 ### Changed
