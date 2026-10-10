@@ -26,8 +26,8 @@ documented rejection causes, and drafts compliant copy from intake fields.
 
 Three actions, priced by the work involved:
 
-1. **Review existing copy** (`scripts/validate.sh`) — **1 credit**. Take any
-   of the 9 GHL Trust Center sections the user already has and run them
+1. **Review existing copy** (`scripts/validate.sh`) — **free**. Take any
+   of the 10 GHL Trust Center sections the user already has and run them
    through Easy A2P's rule library. Returns structured findings with status
    (pass/warn/fail), the specific rule that fired, and why it matters.
    **Review is a grading action only — it does NOT return paste-ready
@@ -40,7 +40,7 @@ Three actions, priced by the work involved:
    two sample messages, opt-in checkboxes, opt-in confirmation, opt-in flow
    description, plus Privacy Policy and Terms of Service SMS sections.
 
-3. **Fix existing copy** (`scripts/fix.sh`) — **3 credits**. Take failing or
+3. **Fix existing copy** (`scripts/fix.sh`) — **1 credit**. Take failing or
    rejected copy and return paste-ready corrected copy that has been
    self-verified against the rule library. This is the rewrite/recovery
    path. The 3-credit cost reflects the generate-and-self-verify loop the
@@ -53,7 +53,7 @@ needs an Easy A2P account and credits — sign up at https://easya2p.app
 
 ## Fix is gated behind a Review (REQUIRED)
 
-`fix` (3 credits) is NEVER a first action and is NEVER offered before the
+`fix` (1 credit) is NEVER a first action and is NEVER offered before the
 user has run a Review. A Review is what tells the user — and the fix —
 exactly what is wrong.
 
@@ -67,15 +67,14 @@ exactly what is wrong.
 3. **After the Review, offer the fix with the cost stated plainly:**
 
 > "That's your 1-credit review. Want me to fix the failing sections? A
-> fix costs 3 credits — it returns paste-ready corrected copy,
+> fix costs 1 credit — it returns paste-ready corrected copy,
 > self-verified against the rule library. Proceed?"
 
    Wait for an explicit "yes" before calling `scripts/fix.sh`.
 
-Why: the Review is 1 credit and names precisely what fails. Spending 3
-credits on a fix without that baseline is a worse deal for the user — and
-the fix produces better copy when it has the Review's findings to work
-from.
+Why: the Review is free and names precisely what fails. There is no
+reason to spend a credit on a fix without that baseline — and the fix
+produces better copy when it has the Review's findings to work from.
 
 ## Authentication
 
@@ -99,7 +98,7 @@ export as a "for next time" follow-up.
 
 ## When to invoke each action
 
-**Use `review` (1 credit) when the user:**
+**Use `review` (free) when the user:**
 - Pastes existing copy and asks "is this compliant?" or "will this pass?"
 - Wants a grade only — they'll rewrite it themselves
 - Wants to audit a Privacy Policy or Terms of Service
@@ -107,14 +106,14 @@ export as a "for next time" follow-up.
 
 After a review, present findings only. Do NOT compose a paste-ready
 rewrite in your response. If the user wants the rewrite, surface the
-3-credit `fix` option as a follow-up.
+1-credit `fix` option as a follow-up.
 
 **Use `draft` (2 credits) when the user:**
 - Is starting a new GHL A2P registration from scratch
 - Has switched use cases and needs all sections regenerated
 - Wants compliant templates for a specific industry or use case
 
-**Use `fix` (3 credits) — but ONLY after a Review has run this session.**
+**Use `fix` (1 credit) — but ONLY after a Review has run this session.**
 `fix` is always a follow-up to a Review, never a standalone first action
 (see "Fix is gated behind a Review" above). After the Review, it is the
 right follow-up when the user:
@@ -171,8 +170,8 @@ When the user invokes this skill:
    wants corrected copy, that does NOT go straight to `fix` — it begins
    with a Review (step 3), and `fix` (step 5) is offered only afterward.
 
-3. **For `review` (1 credit):** Collect the section text from the user.
-   Each of the 9 GHL Trust Center sections has its own field name — see
+3. **For `review` (free):** Collect the section text from the user.
+   Each of the 10 GHL Trust Center sections has its own field name — see
    `reference/section-fields.md` for the canonical names. Map the user's
    pasted copy to the right field, then call `scripts/validate.sh`.
    Present findings only — name the section, the rule that fired, why it
@@ -537,8 +536,8 @@ When the user invokes this skill:
    > **If you don't have an account yet:**
    > 1. Visit https://easya2p.app and click **Sign Up**.
    > 2. Sign up with email or Google. New accounts get **3 free credits**
-   >    — enough for one Draft Fresh Copy (2 credits) plus one Review of
-   >    Existing Copy (1 credit).
+   >    — and copy reviews are free, so credits only go to drafts
+   >    (2 credits) and fixes (1 credit).
    > 3. Verify your email if prompted.
    > 4. Open Easy A2P again, click your name in the top right →
    >    **API Access**, click **Generate API Key**, and copy the key.
@@ -710,7 +709,7 @@ When the user invokes this skill:
    to do anything special here — the wrapped text is in `section.text`
    ready to render.
 
-5. **For `fix` (3 credits):** **A `fix` only ever runs after a Review has
+5. **For `fix` (1 credit):** **A `fix` only ever runs after a Review has
    completed this session — never before** (see "Fix is gated behind a
    Review"). If the user asked to fix copy they have not yet had reviewed,
    run the Review first (step 3), present the findings, then offer the
@@ -800,7 +799,7 @@ invocation, only when the topic comes up:
 **Example 1 — User asks "check this":**
 User: "Can you check this sample? 'Hi {{contact.first_name}}, your appointment is confirmed. Reply STOP to unsubscribe.'"
 
-Action: Call `review` (1 credit) on the Sample Messages section. Return findings only:
+Action: Call `review` (free) on the Sample Messages section. Return findings only:
 
 > **FAIL — Curly-brace merge fields detected.** The variable `{{contact.first_name}}` reads as broken code to TCR reviewers — this is the #1 documented A2P 10DLC rejection cause.
 >
@@ -811,7 +810,7 @@ Do NOT include the corrected text in the review response — that's what `fix` i
 **Example 1b — User asks "fix this":**
 User: "Fix this sample message: 'Hi {{contact.first_name}}, your appointment is confirmed. Reply STOP.'"
 
-Action: Even though the user said "fix", `fix` never runs before a Review. Run the 1-credit Review on the sample first and present the findings (here: the curly-brace merge field, the missing STOP best-practice). THEN offer the 3-credit fix — "Want me to fix it? That's 3 credits — proceed?" — and only on an explicit "yes" call `scripts/fix.sh` (sample as `Sample Message 1`, the Review's findings passed as `rejectionContext`). Return the `corrected` text in a code block with a one-line summary of what changed.
+Action: Even though the user said "fix", `fix` never runs before a Review. Run the free Review on the sample first and present the findings (here: the curly-brace merge field, the missing STOP best-practice). THEN offer the 1-credit fix — "Want me to fix it? That's 1 credit — proceed?" — and only on an explicit "yes" call `scripts/fix.sh` (sample as `Sample Message 1`, the Review's findings passed as `rejectionContext`). Return the `corrected` text in a code block with a one-line summary of what changed.
 
 **Example 2 — User wants to draft fresh copy with a DBA:**
 User: "I need to set up A2P for my client. Legal entity is Acme Holdings LLC, they go by Acme Salon. They send appointment reminders and occasional offers."

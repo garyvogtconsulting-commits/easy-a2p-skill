@@ -5,6 +5,19 @@ All notable changes to the easy-a2p skill are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.0.7] — 2026-10-10
+
+### Changed
+- **Pricing updated to the web app's v2 model (live 2026-10-09/10):
+  Review is now FREE, `fix` is 1 credit (was documented as 3), `draft`
+  stays 2.** The server has billed these amounts since the switch — this
+  release corrects every place the skill's own docs quoted the old
+  numbers, so the skill no longer warns users about credits a Review
+  doesn't cost. Review-before-fix gating is unchanged (the free Review's
+  findings still feed the fix).
+- Section count corrected to **ten** GHL Trust Center sections in the two
+  `SKILL.md` spots that still said nine.
+
 ## [1.0.6] — 2026-05-19
 
 ### Changed

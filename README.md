@@ -14,7 +14,7 @@ rule engine, so it always runs against the latest rules.
 
 Three actions, the same rules and credits as the [Easy A2P web app](https://app.easya2p.app):
 
-- **review** (1 credit) — Paste any of the 10 GHL Trust Center sections (Brand
+- **review** (free) — Paste any of the 10 GHL Trust Center sections (Brand
   Registration, Campaign / Use Case Description, Sample Message 1, Sample
   Message 2, Marketing Opt-In Checkbox, Non-Marketing Opt-In Checkbox, Opt-In
   Confirmation Message, Opt-In Flow Description, Privacy Policy SMS section,
@@ -94,7 +94,7 @@ you submit.
 
 Credits are shared with the [web app](https://app.easya2p.app) and never expire:
 
-- **review** — 1 credit
+- **review** — free
 - **draft** — 2 credits
 - **fix** — 1 credit
 

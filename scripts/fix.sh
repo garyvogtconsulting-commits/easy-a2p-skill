@@ -5,7 +5,7 @@
 # returns paste-ready corrected copy that has been self-verified against
 # the rule library.
 #
-# COST: 3 credits per call (vs 1 for validate, 1 for draft).
+# COST: 1 credit per call (reviews are free, drafts are 2 credits).
 # The skill MUST confirm with the user before invoking this script.
 #
 # Required env: EASY_A2P_API_KEY
