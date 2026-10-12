@@ -98,9 +98,10 @@ Credits are shared with the [web app](https://app.easya2p.app) and never expire:
 - **draft** — 2 credits
 - **fix** — 1 credit
 
-Every account starts with **3 free credits**, no card required. Need more? Pro is
-$39/month (or $390/year) for 10 credits a month with rollover, plus a one-time
-top-up option. Current plans: [easya2p.app/pricing](https://easya2p.app/pricing).
+Every account starts with **3 free credits**, no card required. Need more? A
+one-time Credit Pack is $12 for 4 credits, and Agency is $29/month (or
+$290/year) for 60 credits a month with rollover. Current plans:
+[easya2p.app/pricing](https://easya2p.app/pricing).
 
 ## License
 
